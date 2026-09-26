@@ -5,6 +5,7 @@ import (
 
 	"github.com/N30A/korturl/internal/config"
 	"github.com/N30A/korturl/internal/middleware"
+	"github.com/N30A/korturl/web/static"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -31,6 +32,7 @@ func (m *WebMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *WebMux) registerRoutes() {
+	m.router.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.FS(static.Files))))
 	m.router.Handle("GET /{code}", middleware.ChainFunc(
 		middleware.Logger,
 		middleware.RateLimit(m.rateLimiter),
