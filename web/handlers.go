@@ -8,8 +8,16 @@ import (
 
 	"github.com/N30A/korturl/internal/httpjson"
 	"github.com/N30A/korturl/internal/shortener"
+	"github.com/N30A/korturl/web/templates"
 	"github.com/jackc/pgx/v5"
 )
+
+func (m *WebMux) indexHandler(w http.ResponseWriter, r *http.Request) {
+	if err := templates.Templates.ExecuteTemplate(w, "base", nil); err != nil {
+		slog.Error("failed to render template", "error", err)
+		http.Error(w, "internal error", http.StatusInternalServerError)
+	}
+}
 
 func (m *WebMux) redirectHandler(w http.ResponseWriter, r *http.Request) {
 	code := strings.TrimSpace(r.PathValue("code"))

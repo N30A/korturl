@@ -32,7 +32,8 @@ func (m *WebMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *WebMux) registerRoutes() {
-	m.router.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.FS(static.Files))))
+	m.router.HandleFunc("GET /", m.indexHandler)
+	m.router.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.FS(static.Files))))
 	m.router.Handle("GET /{code}", middleware.ChainFunc(
 		middleware.Logger,
 		middleware.RateLimit(m.rateLimiter),
