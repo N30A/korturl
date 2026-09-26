@@ -3,6 +3,7 @@ package httpjson
 import (
 	"bytes"
 	"encoding/json"
+	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
@@ -114,10 +115,53 @@ func TestDecodeWithGarbage(t *testing.T) {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
-	ehm, err := Decode[wantStruct](request)
-	t.Log(err)
-	t.Log(ehm)
+
+	_, err := Decode[wantStruct](request)
 	if err == nil {
 		t.Error("Expected error for garbage after valid JSON, got nil")
+	}
+}
+
+func TestWrite(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	data := struct {
+		Username string `json:"username"`
+	}{Username: "test"}
+
+	Write(w, http.StatusOK, data)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status %d, got %d", http.StatusOK, w.Code)
+	}
+
+	if ct := w.Header().Get("Content-Type"); ct != "application/json" {
+		t.Errorf("Expected Content-Type application/json, got %s", ct)
+	}
+
+	var got struct {
+		Username string `json:"username"`
+	}
+
+	if err := json.Unmarshal(w.Body.Bytes(), &got); err != nil {
+		t.Fatalf("Failed to unmarshal response body: %v", err)
+	}
+
+	if got.Username != "test" {
+		t.Errorf("Expected username 'test', got %s", got.Username)
+	}
+}
+
+func TestWriteMarshalError(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	data := struct {
+		Ch chan int `json:"ch"`
+	}{Ch: make(chan int)}
+
+	Write(w, http.StatusOK, data)
+
+	if w.Code != http.StatusInternalServerError {
+		t.Errorf("Expected status %d, got %d", http.StatusInternalServerError, w.Code)
 	}
 }
