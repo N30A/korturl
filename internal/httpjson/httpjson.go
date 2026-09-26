@@ -2,6 +2,7 @@ package httpjson
 
 import (
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 )
@@ -26,6 +27,10 @@ func Decode[T any](r *http.Request) (T, error) {
 	var data T
 	if err := decoder.Decode(&data); err != nil {
 		return data, err
+	}
+
+	if decoder.More() {
+		return data, errors.New("unexpected trailing data after JSON value")
 	}
 
 	return data, nil
