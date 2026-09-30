@@ -1,6 +1,6 @@
-.PHONY: build run test
+.PHONY: build run test templ
 
-build: test
+build: templ test
 	mkdir -p ./bin
 	go build -o ./bin/korturl ./cmd/korturl
 
@@ -9,3 +9,6 @@ run: build
 
 test:
 	go test ./...
+
+templ:
+	templ generate
