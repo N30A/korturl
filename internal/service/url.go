@@ -10,6 +10,7 @@ import (
 	"github.com/N30A/korturl/internal/database"
 	"github.com/N30A/korturl/internal/models"
 	"github.com/N30A/korturl/internal/validation"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -21,6 +22,7 @@ const (
 var (
 	ErrURLCodeAlreadyExists     = errors.New("url with code already exists")
 	ErrURLCodeReachedMaxRetries = errors.New("url code reached max retries")
+	ErrURLNotFound              = errors.New("url was not found")
 )
 
 type URLService struct {
@@ -108,6 +110,20 @@ func (s *URLService) insertURL(ctx context.Context, code, redirectURL string) (m
 	}
 
 	return model, nil
+}
+
+func (s *URLService) GetRedirectURL(ctx context.Context, code string) (string, error) {
+	query := "SELECT redirect_url FROM urls WHERE code = $1"
+
+	var redirectURL string
+	if err := s.pool.QueryRow(ctx, query, code).Scan(&redirectURL); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return "", ErrURLNotFound
+		}
+		return "", err
+	}
+
+	return redirectURL, nil
 }
 
 // generateRandomCode generates a cryptographically secure random code with the
