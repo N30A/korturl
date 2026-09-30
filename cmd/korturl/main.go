@@ -14,6 +14,7 @@ import (
 	"github.com/N30A/korturl/api"
 	"github.com/N30A/korturl/internal/config"
 	"github.com/N30A/korturl/internal/database"
+	"github.com/N30A/korturl/internal/service"
 	"github.com/N30A/korturl/web"
 )
 
@@ -38,7 +39,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	webMux := web.NewMux(cfg, pool)
+	urlService := service.NewURLService(pool)
+
+	webMux := web.NewMux(cfg, urlService)
 	apiMux := api.NewMux(cfg, pool)
 
 	mux := http.NewServeMux()

@@ -1,0 +1,15 @@
+package home
+
+import "github.com/N30A/korturl/web/layouts"
+
+templ Page(title string, data ShortenFormData) {
+	@layouts.Base(title) {
+		<div class="home-wrapper">
+		    <hgroup>
+		        <h2>Korta ned länkar</h2>
+		        <p>Ta en lång URL och gör den kortare eller ange ett alias.</p>
+		    </hgroup>
+			@ShortenForm(data)
+		</div>
+	}
+}

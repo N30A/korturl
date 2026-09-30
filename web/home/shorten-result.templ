@@ -1,0 +1,29 @@
+package home
+
+templ ShortenResult(longURL, shortURL string) {
+	<article id="shorten-result">
+    <form hx-post="/shorten/form" hx-target="#shorten-result" hx-swap="outerHTML">
+        <fieldset>
+            <label>
+                Lång url
+                <input type="text" value={ longURL } readonly />
+            </label>
+            <label>
+                Kort url
+                <input id="short-url" type="text" value={ shortURL } readonly />
+            </label>
+        </fieldset>
+        <div role="group">
+            <a type="button" href={ shortURL } target="_blank" rel="noopener noreferrer"
+                class="outline secondary">Öppna</a>
+            <button id="copy-button"
+            	onclick={ templ.JSFuncCall("copyToClipboard", "#short-url") }
+                type="button"
+                class="secondary">
+                Kopiera
+            </button>
+        </div>
+        <input type="submit" value="Förkorta en ny länk" />
+    </form>
+	</article>
+}

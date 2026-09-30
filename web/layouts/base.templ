@@ -1,0 +1,37 @@
+package layouts
+
+templ Base(title string) {
+	<!doctype html>
+	<html lang="sv" data-theme="light">
+
+	<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="/static/css/pico.jade.min.css"> <!-- 2.1.1 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script defer src="/static/js/htmx.min.js"></script> <!-- 4.0.0 -->
+    <script defer src="/static/js/script.js"></script>
+    <title>{ title }</title>
+	</head>
+
+	<body>
+    <header>
+        <div class="container">
+            <a href="/"><h2>korturl</h2></a>
+            <nav>
+                <ul>
+                    <li><a href="#" class="contrast">Mina länkar</a></li>
+                    <li><a href="https://github.com/N30A/korturl" target="_blank" class="contrast">Github</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+    <main class="container center-x">
+    	{ children... }
+    </main>
+	</body>
+
+	</html>
+}

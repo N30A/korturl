@@ -1,0 +1,59 @@
+package home
+
+type ShortenFormData struct {
+	LongURL    string
+	Error      string
+	AliasError string
+}
+
+templ ShortenForm(data ShortenFormData) {
+	<article id="shorten-form">
+		<form
+			hx-post="/shorten"
+			hx-target="#shorten-form"
+			hx-swap="outerHTML"
+			hx-on::before:request="showBusy('#shorten-submit', 'Förkortar...')"
+		>
+			<fieldset>
+				<label>
+					Lång url
+					<input
+						type="text"
+						name="url"
+						value={ data.LongURL }
+						placeholder="https://exempel.se"
+						autocomplete="url"
+						required
+						if data.Error != "" {
+							aria-invalid="true"
+						}
+						aria-describedby="long-url-help"
+					/>
+					<small id="long-url-help">{ data.Error }</small>
+				</label>
+				<label>
+					Alias (valfritt)
+					<input
+						type="text"
+						name="alias"
+						placeholder="mitt-alias"
+						if data.AliasError != "" {
+							aria-invalid="true"
+						}
+						aria-describedby="alias-help"
+					/>
+					<small id="alias-help">
+						if data.AliasError != "" {
+							{ data.AliasError }
+						} else {
+							Bestäm själv vad som ska stå.
+						}
+					</small>
+				</label>
+			</fieldset>
+			<button id="shorten-submit" type="submit">
+				Förkorta
+			</button>
+		</form>
+	</article>
+}
