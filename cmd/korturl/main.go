@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"log/slog"
 	"net"
 	"net/http"
@@ -29,13 +28,20 @@ func main() {
 
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("config loading failed", "error", err)
+		os.Exit(1)
 	}
 
 	poolCtx, poolCancel := context.WithCancel(context.Background())
 	pool, err := database.Connect(poolCtx, cfg.DB)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("database connection failed", "error", err)
+		os.Exit(1)
+	}
+
+	if err := database.Migrate(cfg.DB); err != nil {
+		slog.Error("database migration failed", "error", err)
+		os.Exit(1)
 	}
 
 	urlService := service.NewURLService(pool)
@@ -49,7 +55,7 @@ func main() {
 	go func() {
 		slog.Info("listening on", "addr", server.Addr)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Println(err)
+			slog.Error("server startup failed", "error", err)
 			signals <- os.Interrupt
 		}
 	}()

@@ -1,0 +1,8 @@
+ CREATE TABLE IF NOT EXISTS visits (
+     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+     url_id bigint NOT NULL REFERENCES urls(id) ON DELETE CASCADE,
+     visited_at timestamptz NOT NULL DEFAULT now()
+     -- eventuellt senare: browser, os, ip, country, etc.
+);
+
+CREATE INDEX IF NOT EXISTS idx_visits_url_id_visited_at ON visits(url_id, visited_at);
