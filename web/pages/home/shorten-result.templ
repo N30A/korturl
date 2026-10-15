@@ -2,7 +2,7 @@ package home
 
 templ ShortenResult(longURL, shortURL string) {
 	<article id="shorten-result">
-    <form hx-post="/shorten/form" hx-target="#shorten-result" hx-swap="outerHTML">
+    <form hx-post="/shorten-form" hx-target="#shorten-result" hx-swap="outerHTML">
         <fieldset>
             <label>
                 Lång url
