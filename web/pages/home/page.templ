@@ -2,9 +2,17 @@ package home
 
 import "github.com/N30A/korturl/web/layouts"
 
+css homeWrapper() {
+	padding-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
 templ Page(title string, data ShortenFormData) {
 	@layouts.Base(title) {
-		<div class="home-wrapper">
+		<div class={ homeWrapper }>
 		    <hgroup>
 		        <h2>Korta ned länkar</h2>
 		        <p>Ta en lång URL och gör den kortare eller ange ett alias.</p>
