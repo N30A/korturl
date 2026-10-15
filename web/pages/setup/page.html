@@ -1,0 +1,59 @@
+{{define "setup.html"}}
+<!doctype html>
+<html lang="sv" data-theme="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="/static/css/pico.jade.min.css"> <!-- 2.1.1 -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script defer src="/static/js/htmx.min.js"></script> <!-- 4.0.0 -->
+    <script defer src="/static/js/script.js"></script>
+    <title>Setup</title>
+</head>
+
+<body>
+    <main class="container center-x">
+        <div class="setup-wrapper">
+            <hgroup>
+                <h2>Setup</h2>
+                <p>Create your administrator account.</p>
+            </hgroup>
+            <article id="setup-form">
+                <form method="post" action="/setup">
+                    <fieldset>
+                        <label>
+                            Username
+                            <input type="text" name="username" placeholder="username" autocomplete="username"
+                                required />
+                        </label>
+                        <label>
+                            Password
+                            <input type="password" name="password" placeholder="********"
+                                autocomplete="current-password" required />
+                        </label>
+                        <label>
+                            Confirm Password
+                            <input type="password" name="confirm_password" placeholder="********"
+                                autocomplete="current-password" required />
+                        </label>
+                    </fieldset>
+                    <button id="setup-submit" type="submit">Setup</button>
+                </form>
+            </article>
+        </div>
+    </main>
+</body>
+
+</html>
+
+<style>
+    .setup-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+</style>
+{{end}}

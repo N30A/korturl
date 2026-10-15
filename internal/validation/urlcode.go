@@ -21,12 +21,12 @@ var (
 	}()
 
 	reservedURLCodesMap = map[string]struct{}{
-		"setup":        {},
-		"login":        {},
-		"logout":       {},
-		"static":       {},
-		"api":          {},
-		"shorten":      {},
+		"setup":  {},
+		"login":  {},
+		"logout": {},
+		"static": {},
+		"api":    {},
+		//"shorten":      {},
 		"shorten/form": {},
 	}
 

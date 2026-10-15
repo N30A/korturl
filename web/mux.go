@@ -5,7 +5,8 @@ import (
 
 	"github.com/N30A/korturl/internal/config"
 	"github.com/N30A/korturl/internal/service"
-	"github.com/N30A/korturl/web/home"
+	"github.com/N30A/korturl/web/pages/home"
+	"github.com/N30A/korturl/web/pages/shorten"
 	"github.com/N30A/korturl/web/static"
 )
 
@@ -14,7 +15,8 @@ type WebMux struct {
 	config     config.Config
 	urlService *service.URLService
 
-	homeHandler *home.Handler
+	homeHandler    *home.Handler
+	shortenHandler *shorten.Handler
 }
 
 func NewMux(config config.Config, urlService *service.URLService) *WebMux {
@@ -23,7 +25,8 @@ func NewMux(config config.Config, urlService *service.URLService) *WebMux {
 		config:     config,
 		urlService: urlService,
 
-		homeHandler: home.NewHandler(config, urlService),
+		homeHandler:    home.NewHandler(config, urlService),
+		shortenHandler: shorten.NewHandler(config, urlService),
 	}
 	mux.registerRoutes()
 	return mux
@@ -36,6 +39,8 @@ func (m *WebMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (m *WebMux) registerRoutes() {
 	m.router.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.FS(static.Files))))
 	m.homeHandler.RegisterRoutes(m.router)
+	m.shortenHandler.RegisterRoutes(m.router)
+
 	// m.router.Handle("GET /setup", protected(m.setupHandler))
 	// m.router.Handle("POST /setup", protected(m.setupHandler))
 }
