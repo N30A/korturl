@@ -29,9 +29,9 @@ func NewHandler(config config.Config, urlService *service.URLService) *Handler {
 
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("GET /", middleware.Logger(http.HandlerFunc(h.Index)))
-	mux.Handle("POST /", middleware.Logger(http.HandlerFunc(h.Shorten)))
-	mux.Handle("POST /form", middleware.Logger(http.HandlerFunc(h.ShortenForm)))
 	mux.Handle("GET /{code}", middleware.Logger(http.HandlerFunc(h.Redirect)))
+	mux.Handle("POST /", middleware.Logger(http.HandlerFunc(h.Shorten)))
+	mux.Handle("POST /shorten-form", middleware.Logger(http.HandlerFunc(h.ShortenForm)))
 }
 
 func (h *Handler) Redirect(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func (h *Handler) Redirect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := validation.ReservedURLCode(code); err != nil {
-		render.Component(w, r, pages.Error("Reserved short URL", "This short URL cannot be used."))
+		render.Component(w, r, pages.Error("Reserved short URL", "This short URL is reserved."))
 		return
 	}
 

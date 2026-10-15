@@ -9,21 +9,18 @@ templ Base(title string) {
 			<meta name="color-scheme" content="light dark"/>
 			<link rel="stylesheet" href="/static/css/pico.min.css"/> <!-- 2.1.1 -->
 			<link rel="stylesheet" href="/static/css/style.css"/>
-			<script defer src="/static/js/htmx.min.js"></script> <!-- 4.0.0 -->
+			<script defer src="/static/js/htmx.min.js"></script>
+			<!-- 4.0.0 -->
 			<script defer src="/static/js/theme-switcher.js"></script>
 			<script defer src="/static/js/modal.js"></script>
 			<script defer src="/static/js/script.js"></script>
 			<title>{ title }</title>
 		</head>
 		<body>
-			<aside class="sidebar">
-				<a href="/"><h1>korturl</h1></a>
+			<header class="container">
 				<nav>
 					<ul>
-						<li><a href="/" class="contrast"><strong>Översikt</strong></a></li>
-						<li><a href="#" class="contrast"><strong>Länkar</strong></a></li>
-						<li><a href="/shorten" class="contrast"><strong>Skapa länk</strong></a></li>
-						<li><a href="#" class="contrast"><strong>Användare</strong></a></li>
+						<li><a href="/"><h1>korturl</h1></a></li>
 					</ul>
 					<ul>
 						<li>
@@ -37,15 +34,14 @@ templ Base(title string) {
 								</summary>
 								<ul>
 									<li><a data-theme-switcher="auto">Auto</a></li>
-									<li><a data-theme-switcher="light">Light</a></li>
-									<li><a data-theme-switcher="dark">Dark</a></li>
+									<li><a data-theme-switcher="light">Ljust</a></li>
+									<li><a data-theme-switcher="dark">Mörkt</a></li>
 								</ul>
 							</details>
 						</li>
-						<li><a role="button" href="/logout" class="logout contrast">Logga ut</a></li>
 					</ul>
 				</nav>
-			</aside>
+			</header>
 			<main class="container-fluid">
 				{ children... }
 			</main>

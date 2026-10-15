@@ -1,35 +1,21 @@
 package pages
 
+import "github.com/N30A/korturl/web/layouts"
+
 css class() {
 	display: flex;
 	justify-content: center;
 	text-align: center;
-    padding-top: 15rem;
+	padding-top: 15rem;
 }
 
 templ Error(title, message string) {
-	<!DOCTYPE html>
-	<html lang="sv">
-		<head>
-			<meta charset="utf-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<meta name="color-scheme" content="light dark"/>
-			<link rel="stylesheet" href="/static/css/pico.min.css"/> <!-- 2.1.1 -->
-			<script defer src="/static/js/theme-switcher.js"></script>
-			<title>{ title }</title>
-		</head>
-		<body>
-			<header class="container">
-				<nav><a><h1>korturl</h1></a></nav>
-			</header>
-			<main class={ "container", class }>
-				<div>
-					<hgroup>
-						<h2>{ title }</h2>
-						<p>{ message }</p>
-					</hgroup>
-				</div>
-			</main>
-		</body>
-	</html>
+	@layouts.Base("Något gick fel") {
+		<div class={ "container", class }>
+			<hgroup>
+				<h2>{ title }</h2>
+				<p>{ message }</p>
+			</hgroup>
+		</div>
+	}
 }

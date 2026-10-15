@@ -20,15 +20,7 @@ var (
 		return m
 	}()
 
-	reservedURLCodesMap = map[string]struct{}{
-		"setup":  {},
-		"login":  {},
-		"logout": {},
-		"static": {},
-		"api":    {},
-		//"shorten":      {},
-		"shorten/form": {},
-	}
+	reservedURLCodesMap = map[string]struct{}{}
 
 	ErrURLCodeTooShort = errors.New("code too short")
 	ErrURLCodeTooLong  = errors.New("code too long")
