@@ -40,7 +40,4 @@ func (m *WebMux) registerRoutes() {
 	m.router.Handle("GET /static/", http.StripPrefix("/static", http.FileServer(http.FS(static.Files))))
 	m.homeHandler.RegisterRoutes(m.router)
 	m.shortenHandler.RegisterRoutes(m.router)
-
-	// m.router.Handle("GET /setup", protected(m.setupHandler))
-	// m.router.Handle("POST /setup", protected(m.setupHandler))
 }

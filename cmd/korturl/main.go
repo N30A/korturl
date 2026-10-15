@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/N30A/korturl/api"
 	"github.com/N30A/korturl/internal/config"
 	"github.com/N30A/korturl/internal/database"
 	"github.com/N30A/korturl/internal/service"
@@ -41,14 +40,7 @@ func main() {
 
 	urlService := service.NewURLService(pool)
 
-	webMux := web.NewMux(cfg, urlService)
-	apiMux := api.NewMux(cfg, pool)
-
-	mux := http.NewServeMux()
-
-	mux.Handle("/", webMux)
-	mux.Handle("/api/", http.StripPrefix("/api", apiMux))
-
+	mux := web.NewMux(cfg, urlService)
 	server := &http.Server{
 		Addr:    net.JoinHostPort(host, port),
 		Handler: mux,
