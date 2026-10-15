@@ -2,6 +2,8 @@
 
 En enkel URL-förkortare med stöd för en slumpmässigt genererad kod eller valfritt eget alias.
 
+![Skärmdump av korturl](assets/screenshot.png)
+
 ## Funktioner
 
 - Förkorta URL:er med slumpmässiga koder
