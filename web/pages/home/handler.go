@@ -16,22 +16,33 @@ import (
 )
 
 type Handler struct {
-	baseURL    string
-	urlService *service.URLService
+	baseURL     string
+	urlService  *service.URLService
+	rateLimiter *middleware.RateLimiter
 }
 
 func NewHandler(config config.Config, urlService *service.URLService) *Handler {
 	return &Handler{
-		baseURL:    config.BaseURL,
-		urlService: urlService,
+		baseURL:     config.BaseURL,
+		urlService:  urlService,
+		rateLimiter: middleware.NewRateLimiter(middleware.DefaultRateLimitConfig),
 	}
 }
 
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
+	protected := middleware.Chain(
+		middleware.Logger,
+		middleware.RateLimit(h.rateLimiter),
+	)
+
 	mux.Handle("GET /", middleware.Logger(http.HandlerFunc(h.Index)))
-	mux.Handle("GET /{code}", middleware.Logger(http.HandlerFunc(h.Redirect)))
-	mux.Handle("POST /", middleware.Logger(http.HandlerFunc(h.Shorten)))
-	mux.Handle("POST /shorten-form", middleware.Logger(http.HandlerFunc(h.ShortenForm)))
+	mux.Handle("GET /{code}", protected(http.HandlerFunc(h.Redirect)))
+	mux.Handle("POST /", protected(http.HandlerFunc(h.Shorten)))
+	mux.Handle("POST /shorten-form", middleware.Logger(http.HandlerFunc(h.NewShortenForm)))
+}
+
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	render.Component(w, r, Page("korturl", ShortenFormData{}))
 }
 
 func (h *Handler) Redirect(w http.ResponseWriter, r *http.Request) {
@@ -63,10 +74,6 @@ func (h *Handler) Redirect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, redirectURL, http.StatusFound)
-}
-
-func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
-	render.Component(w, r, Page("korturl", ShortenFormData{}))
 }
 
 func (h *Handler) Shorten(w http.ResponseWriter, r *http.Request) {
@@ -117,11 +124,6 @@ func (h *Handler) Shorten(w http.ResponseWriter, r *http.Request) {
 	render.Component(w, r, ShortenResult(redirectURL, shortURL))
 }
 
-func (h *Handler) ShortenForm(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	render.Component(w, r, ShortenForm(ShortenFormData{LongURL: r.FormValue("url")}))
+func (h *Handler) NewShortenForm(w http.ResponseWriter, r *http.Request) {
+	render.Component(w, r, ShortenForm(ShortenFormData{}))
 }

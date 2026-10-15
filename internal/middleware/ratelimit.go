@@ -10,9 +10,9 @@ import (
 )
 
 var DefaultRateLimitConfig = RateLimitConfig{
-	Capacity:   25,
-	RefillRate: 2.5,
-	TTL:        time.Second * 120,
+	Capacity:   50,
+	RefillRate: 10,
+	TTL:        time.Minute * 2,
 }
 
 type RateLimitConfig struct {
