@@ -15,7 +15,7 @@ func class() templ.CSSClass {
 	templ_7745c5c3_CSSBuilder.WriteString(`display:flex;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`justify-content:center;`)
 	templ_7745c5c3_CSSBuilder.WriteString(`text-align:center;`)
-	templ_7745c5c3_CSSBuilder.WriteString(`padding-top:15rem;`)
+	templ_7745c5c3_CSSBuilder.WriteString(`padding-top:5rem;`)
 	templ_7745c5c3_CSSID := templ.CSSID(`class`, templ_7745c5c3_CSSBuilder.String())
 	return templ.ComponentCSSClass{
 		ID:    templ_7745c5c3_CSSID,
