@@ -118,3 +118,21 @@ func TestLoadWithEnvFile(t *testing.T) {
 		t.Errorf("Failed to load config: %v", err)
 	}
 }
+
+func TestValidBaseURL(t *testing.T) {
+	t.Setenv("BASE_URL", "http://localhost:8080")
+
+	_, err := getBaseURL()
+	if err != nil {
+		t.Errorf("Got invalid BASE_URL, should be valid: %v", err)
+	}
+}
+
+func TestInvalidBaseURL(t *testing.T) {
+	t.Setenv("BASE_URL", "localhost:8080")
+
+	_, err := getBaseURL()
+	if err == nil {
+		t.Errorf("Got valid BASE_URL, should be invalid: %v", err)
+	}
+}

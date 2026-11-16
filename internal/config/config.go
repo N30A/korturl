@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -32,6 +33,15 @@ var requiredEnvs = []string{
 	"BASE_URL",
 }
 
+func getBaseURL() (string, error) {
+	value := getEnv("BASE_URL")
+	if strings.HasPrefix(value, "http://") || strings.HasPrefix(value, "https://") {
+		return value, nil
+	}
+
+	return "", errors.New("BASE_URL is not a valid http/https url")
+}
+
 func getEnv(key string) string {
 	return strings.TrimSpace(os.Getenv(key))
 }
@@ -60,8 +70,13 @@ func Load() (Config, error) {
 		return Config{}, err
 	}
 
+	baseURL, err := getBaseURL()
+	if err != nil {
+		return Config{}, err
+	}
+
 	return Config{
-		BaseURL: getEnv("BASE_URL"),
+		BaseURL: baseURL,
 		DB: DBConfig{
 			Name:     getEnv("DATABASE_NAME"),
 			User:     getEnv("DATABASE_USER"),
